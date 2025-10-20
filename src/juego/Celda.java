@@ -5,7 +5,7 @@ import java.awt.Color;
 
 public class Celda {
 	private int x;
-	private int y;
+	private int y;	
 	private int largo;
 	private int ancho;
 	private Color color;
@@ -21,6 +21,10 @@ public class Celda {
 	
 	public void dibujar (Entorno e) {
 		e.dibujarRectangulo(this.x,  this.y, this.ancho, this.largo, 0.0, this.color);
+	}
+	
+	public void setX(int x) {	
+		this.x = x;
 	}
 
 }

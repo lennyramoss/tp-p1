@@ -18,14 +18,18 @@ public class Juego extends InterfaceJuego {
 		this.celdas = new Celda[5];
 		this.entorno.iniciar();
 	}
+	
+	public void iniciar() {
+		int x = 60;
+		for (int i = 0; i < celdas.length; i++) {
+			this.celdas[i] = new Celda(x,60,120,120, Color.green);
+			x++;
+		}
+	}
 
 
 	public void tick(){
 		this.interfaz.dibujar(entorno);
-		for (int i=0;i<celdas.length;i++) {
-			this.celda.dibujar(entorno);
-			this.celda.int x
-		}
 		
 	}
 	
