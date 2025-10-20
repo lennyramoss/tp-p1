@@ -11,10 +11,11 @@ public class Juego extends InterfaceJuego {
 	private InterfazPrueba interfaz;
 	//private Celda celda;
 	private Celda[] celdas;
+	private ZombieGrinch grinch;
 	
 	Juego() {
 		this.interfaz = new InterfazPrueba(512,84,168,1024,Color.gray);
-		this.celda = new Celda(84,228,120,120,Color.green);
+		//this.celda = new Celda(84,228,120,120,Color.green);
 		int filas = 5;
 		int columnas = 10;
 		int posX = 75;
@@ -30,6 +31,7 @@ public class Juego extends InterfaceJuego {
 				}
 				
 		}
+		this.grinch = new ZombieGrinch(1024, 350);
 		this.entorno.iniciar();
 	}
 
@@ -39,7 +41,8 @@ public class Juego extends InterfaceJuego {
 		for (int i=0;i<celdas.length;i++) {
 			this.celdas[i].dibujar(entorno);
 		}
-		
+		this.grinch.dibujar(entorno);
+		this.grinch.caminar();
 	}
 	
 
