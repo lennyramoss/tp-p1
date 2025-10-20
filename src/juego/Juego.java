@@ -2,6 +2,7 @@ package juego;
 
 
 import java.awt.Color;
+import java.util.Random;
 
 import entorno.Entorno;
 import entorno.InterfaceJuego;
@@ -11,7 +12,8 @@ public class Juego extends InterfaceJuego {
 	private InterfazPrueba interfaz;
 	//private Celda celda;
 	private Celda[] celdas;
-	private ZombieGrinch grinch;
+	private ZombieGrinch[] zombies;
+	Random random = new Random();
 	
 	Juego() {
 		this.interfaz = new InterfazPrueba(512,84,168,1024,Color.gray);
@@ -20,6 +22,7 @@ public class Juego extends InterfaceJuego {
 		int columnas = 10;
 		int posX = 75;
 		int posY = 250;
+		
 		this.celdas = new Celda[filas * columnas];
 		int cont = 0;
 		for (int fil = 0; fil < filas; fil++) {
@@ -31,7 +34,7 @@ public class Juego extends InterfaceJuego {
 				}
 				
 		}
-		this.grinch = new ZombieGrinch(1024, 350);
+		this.zombies = new ZombieGrinch[15];
 		this.entorno.iniciar();
 	}
 
@@ -41,10 +44,28 @@ public class Juego extends InterfaceJuego {
 		for (int i=0;i<celdas.length;i++) {
 			this.celdas[i].dibujar(entorno);
 		}
-		this.grinch.dibujar(entorno);
-		this.grinch.caminar();
+		
+		for (int i = 0; i < zombies.length; i++) {
+			if (zombies[i] != null) {
+				zombies[i].dibujar(entorno);
+				zombies[i].caminar();
+			}	
+		}
+		agregarZombie();
+		
 	}
 	
+	private void agregarZombie() {
+        int[] posFila = {250, 350, 450, 550, 650}; 
+        int filaRandom = random.nextInt(5);
+        
+        for (int i = 0; i < zombies.length; i++) {
+            if (zombies[i] == null) {
+                zombies[i] = new ZombieGrinch(entorno.ancho(), posFila[filaRandom]);
+                return; 
+            }
+        }
+    }
 
 	@SuppressWarnings("unused")
 	public static void main(String[] args)
