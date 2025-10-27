@@ -13,6 +13,8 @@ public class Juego extends InterfaceJuego {
 	//private Celda celda;
 	private Celda[] celdas;
 	private ZombieGrinch[] zombies;
+	private Regalo[] regalos;
+	private Planta planta;
 	Random random = new Random();
 	private int contadorTicks = 0;
 	private int intervaloSpawn =180; // empieza cada -3 seg.
@@ -20,6 +22,7 @@ public class Juego extends InterfaceJuego {
 	
 	Juego() {
 		this.interfaz = new InterfazPrueba(512,84,168,1024,Color.gray);
+		
 		//this.celda = new Celda(84,228,120,120,Color.green);
 		int filas = 5;
 		int columnas = 10;
@@ -42,14 +45,29 @@ public class Juego extends InterfaceJuego {
 				cont++;
 				}
 		}
-				
+		
+		regalos = new Regalo[5];
+		int x = 75;
+        //int y = 250;
+		int[] posFila = {250, 350, 450, 550, 650}; //misma que la de zombies
+ 
+		for (int i=0;i<regalos.length;i++) {
+			regalos[i] = new Regalo(x,posFila[i],50,50,Color.orange);
+			//regalos[i] = new Regalo(x,y,100,200,Color.cyan);
+			//y+=100;
+		}
 		this.zombies = new ZombieGrinch[15];
 		this.entorno.iniciar();
+		
+		
+		
 	}
 
 
 	public void tick(){
-		this.interfaz.dibujar(entorno);
+		
+		
+		interfaz.dibujar(entorno);
 		// dibujar celdas 
 		for (int i=0;i<celdas.length;i++) {
 			this.celdas[i].dibujar(entorno);
@@ -61,6 +79,11 @@ public class Juego extends InterfaceJuego {
 				zombies[i].caminar();
 			}	
 		}
+		for (int i = 0; i < regalos.length; i++) {
+		    Regalo r = regalos[i];
+		    r.dibujar(entorno);
+		}
+
 		//control de Spawn
 		contadorTicks++;
 		if (contadorTicks >= intervaloSpawn) {
@@ -73,7 +96,24 @@ public class Juego extends InterfaceJuego {
 			ronda++;
 		agregarZombie();
 		}
+		//planta = new Planta(75, 250, 80, Color.orange, 3); //ejemplo de regalo
+		//porque si se comen un regalo no se pueden spawnear mas plantas
+
+		
+		
+		this.planta.dibujar(entorno);
+		double diametro = 80.0;
+		if (entorno.sePresionoBoton(entorno.BOTON_IZQUIERDO)) {
+			planta = new Planta(entorno.mouseX(), entorno.mouseY(), diametro, Color.PINK, 3);
+		}
+		if (planta != null) {
+		    planta.dibujar(entorno);
+		}
 	}
+		
+		
+	
+	
 	
 	private void agregarZombie() {
         int[] posFila = {250, 350, 450, 550, 650}; 
@@ -85,6 +125,7 @@ public class Juego extends InterfaceJuego {
                 return; 
             }
         }
+
     }
 
 	@SuppressWarnings("unused")
