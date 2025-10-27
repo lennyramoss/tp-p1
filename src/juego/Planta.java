@@ -6,22 +6,20 @@ import java.awt.Color;
 public class Planta {
     private int x;
     private int y;
-    private int ancho;
-    private int alto;
+    private int diametro;
     private Color color;
     private int vida;     
 
-    Planta(int x, int y, int ancho, int alto, Color c, int vida) {
+    Planta(int x, int y, int diametro, Color c, int vida) {
         this.x = x;
         this.y = y;
-        this.ancho = ancho;
-        this.alto = alto;
+        this.diametro = diametro;
         this.color = c;
         this.vida = vida;
     }
 
     public void dibujar(Entorno e) {
-        e.dibujarRectangulo(this.x, this.y, this.ancho, this.alto, 0.0, this.color);
+    	e.dibujarCirculo(this.x, this.y, this.diametro, this.color);
     }
 
 
@@ -30,3 +28,5 @@ public class Planta {
     }
 
 }
+
+//buscar colission en moodle

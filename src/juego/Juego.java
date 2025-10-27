@@ -14,6 +14,7 @@ public class Juego extends InterfaceJuego {
 	private Celda[] celdas;
 	private ZombieGrinch[] zombies;
 	private Regalo[] regalos;
+	private Planta[] listaPlanta;
 	private Planta planta;
 	Random random = new Random();
 	private int contadorTicks = 0;
@@ -22,7 +23,7 @@ public class Juego extends InterfaceJuego {
 	
 	Juego() {
 		this.interfaz = new InterfazPrueba(512,84,168,1024,Color.gray);
-		
+		this.planta = new Planta(75, 250, 50, Color.orange, 3);
 		//this.celda = new Celda(84,228,120,120,Color.green);
 		int filas = 5;
 		int columnas = 10;
@@ -57,6 +58,7 @@ public class Juego extends InterfaceJuego {
 			//y+=100;
 		}
 		this.zombies = new ZombieGrinch[15];
+		this.listaPlanta = new Planta[10];
 		this.entorno.iniciar();
 		
 		
@@ -84,6 +86,8 @@ public class Juego extends InterfaceJuego {
 		    r.dibujar(entorno);
 		}
 
+		
+		
 		//control de Spawn
 		contadorTicks++;
 		if (contadorTicks >= intervaloSpawn) {
@@ -91,24 +95,24 @@ public class Juego extends InterfaceJuego {
 			contadorTicks=0;
 			// aumentar dificultad progresivamente 
 			if(intervaloSpawn >60);
-			intervaloSpawn-=10; //se acelera hasta 1 seg aprox.
+			intervaloSpawn-=1; //se acelera hasta 1 seg aprox.
 			if (ronda <10);
 			ronda++;
 		agregarZombie();
 		}
-		//planta = new Planta(75, 250, 80, Color.orange, 3); //ejemplo de regalo
-		//porque si se comen un regalo no se pueden spawnear mas plantas
 
 		
 		
 		this.planta.dibujar(entorno);
-		double diametro = 80.0;
+		int diametro = 80;
 		if (entorno.sePresionoBoton(entorno.BOTON_IZQUIERDO)) {
 			planta = new Planta(entorno.mouseX(), entorno.mouseY(), diametro, Color.PINK, 3);
 		}
 		if (planta != null) {
 		    planta.dibujar(entorno);
 		}
+		
+		
 	}
 		
 		
