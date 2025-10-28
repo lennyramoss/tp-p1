@@ -20,6 +20,7 @@ public class Juego extends InterfaceJuego {
 	private int contadorTicks = 0;
 	private int intervaloSpawn =180; // empieza cada -3 seg.
 	private int ronda =1;
+	private Bala[] balas;
 	
 	Juego() {
 		this.interfaz = new InterfazPrueba(512,84,168,1024,Color.gray);
@@ -29,6 +30,53 @@ public class Juego extends InterfaceJuego {
 		int columnas = 10;
 		int posX = 75;
 		int posY = 250;
+		
+		// --- DISPARO AUTOMÁTICO ---
+		boolean hayZombieEnFila = false;
+		for (ZombieGrinch z : zombies) {
+		    if (z != null && Math.abs(z.getY() - planta.getY()) < 20 && z.getX() > planta.getX()) {
+		        hayZombieEnFila = true;
+		        break;
+		    }
+		}
+
+		if (hayZombieEnFila) {
+		    // Buscar espacio libre para una nueva bala
+		    for (int i = 0; i < balas.length; i++) {
+		        if (balas[i] == null || !balas[i].estaActiva()) {
+		            balas[i] = new Bala(this.X+ 30, this.y);
+		            break;
+		        }
+		    }
+		}
+
+		// --- ACTUALIZAR Y DIBUJAR BALAS ---
+		for (int i = 0; i < balas.length; i++) {
+		    Bala b = balas[i];
+		    if (b != null && b.estaActiva()) {
+		        b.mover();
+		        b.dibujar(entorno);
+
+		        // Colisión con zombies
+		        for (int j = 0; j < zombies.length; j++) {
+		            ZombieGrinch z = zombies[j];
+		            if (z != null && b.colisionaConZombie(z)) {
+		                z.recibirDanio();
+		                b.desactivar();
+		                if (z.getVida() <= 0) {
+		                    zombies[j] = null;
+		                }
+		                break;
+		            }
+		        }
+
+		        // Si sale de la pantalla por la derecha
+		        if (b.fueradelrecuadro(entorno)) {
+		            b.desactivar();
+		        }
+		    }
+		}
+
 		
 		this.celdas = new Celda[filas * columnas];
 		int cont = 0;
@@ -45,6 +93,7 @@ public class Juego extends InterfaceJuego {
 				this.celdas[cont]= new Celda(x,y,98,98, colorCelda);
 				cont++;
 				}
+		
 		}
 		
 		regalos = new Regalo[5];
@@ -60,9 +109,7 @@ public class Juego extends InterfaceJuego {
 		this.zombies = new ZombieGrinch[15];
 		this.listaPlanta = new Planta[10];
 		this.entorno.iniciar();
-		
-		
-		
+		this.balas = new Bala[50];
 	}
 
 
@@ -114,11 +161,7 @@ public class Juego extends InterfaceJuego {
 		
 		
 	}
-		
-		
-	
-	
-	
+
 	private void agregarZombie() {
         int[] posFila = {250, 350, 450, 550, 650}; 
         int filaRandom = random.nextInt(5);

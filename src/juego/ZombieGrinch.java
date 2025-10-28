@@ -10,16 +10,18 @@ public class ZombieGrinch {
     private int y;
     private double velocidad;
     private int vida;
-
+    private double diametro;
+    
     ZombieGrinch(int x, int y) {
         this.x = x;
         this.y = y;
         this.velocidad = 1;
         this.vida = 5;
+        this.diametro = 75;
         }
 
     public void dibujar(Entorno entorno) {
-        entorno.dibujarCirculo(this.x, this.y, 75, Color.red);
+        entorno.dibujarCirculo(this.x, this.y, diametro, Color.red);
     }
 
     public void caminar() {
@@ -37,7 +39,9 @@ public class ZombieGrinch {
     public double getY() {
     	return this.y;
     	}
-    
+    public double getDiametro() {
+    	return this.diametro;
+    }
     public boolean estaVivo() {
     	if (this.vida > 0) {
             return true;
@@ -46,4 +50,7 @@ public class ZombieGrinch {
             return false;
     	}
     }
+    public double getVida() {
+    	return this.vida;
+    	}
 }
