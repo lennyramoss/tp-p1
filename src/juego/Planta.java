@@ -27,6 +27,14 @@ public class Planta {
         return this.vida > 0;
     }
 
+    public int getX() {
+    	return x; 
+    }
+    
+    public int getY() { 
+    	return y; 
+    }
+
 }
 
 //buscar colission en moodle

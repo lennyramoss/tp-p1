@@ -31,23 +31,24 @@ public class Juego extends InterfaceJuego {
 		balas = new Bala[50];
 
 		// --- DISPARO AUTOMÁTICO ---
-//		boolean hayZombieEnFila = false;
-//		for (ZombieGrinch z : zombies) {
-//		    if (z != null && Math.abs(z.getY() - planta.getY()) < 20 && z.getX() > planta.getX()) {
-//		        hayZombieEnFila = true;
-//		        break;
-//		    }
-//		}
-//
-//		if (hayZombieEnFila) {
-//		    // Buscar espacio libre para una nueva bala
-//		    for (int i = 0; i < balas.length; i++) {
-//		        if (balas[i] == null || !balas[i].estaActiva()) {
-//		            balas[i] = new Bala(this.x+ 30, this.y);
-//		            break;
-//		        }
-//		    }
-//		}
+		boolean hayZombieEnFila = false;
+		for (ZombieGrinch z : zombies) {
+		    if (z != null && Math.abs(z.getY() - planta.getY()) < 20 && z.getX() > planta.getX()) {
+		        hayZombieEnFila = true;
+		        break;
+		    }
+		}
+	
+		if (hayZombieEnFila) {
+		    // Buscar espacio libre para una nueva bala
+		    for (int i = 0; i < balas.length; i++) {
+		        if (balas[i] == null || !balas[i].estaActiva()) {
+		            balas[i] = new Bala(this.x+ 30, this.y);
+		            break;
+		        }
+		    }
+		}
+
 
 		// --- ACTUALIZAR Y DIBUJAR BALAS ---
 		for (int i = 0; i < balas.length; i++) {
