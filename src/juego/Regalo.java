@@ -23,8 +23,8 @@ public class Regalo {
 		e.dibujarRectangulo(this.x,  this.y, this.ancho, this.largo, 0.0, this.color);
 	}
 	
-	public boolean colisionaConCirculo(Regalo p) {
-		if(p==null) {
+	public boolean colisionaConCirculo(ZombieGrinch z) {
+		if(z==null) {
 			return false;
 		}
 		int bordeIzquierdo=this.x - (this.ancho/2);
@@ -35,21 +35,55 @@ public class Regalo {
 		int xCercano=Math.max(bordeIzquierdo, Math.min(bordeDerecho,this.x));
 		int yCercano=Math.max(bordeSuperior, Math.min(bordeInferior,this.y));
 		
-		int difX=xCercano-p.getX();
-		int difY=yCercano-p.getY();
+		int difX=xCercano-z.getX();
+		int difY=yCercano-z.getY();
 		int distancia=(int) Math.sqrt((difX*difX)+(difY*difY));
 		
-		if(distancia<=p.getDiametro()/2) {
+		if(distancia<=z.getDiametro()/2) {
 			return true;
 		}else {
 			return false;
 		}			
 	}
 	
-    //buscar colission en moodle
     
-	public void setX(int x) {	
-		this.x = x;
-	}
+    public int getX() {
+    	return x; 
+    }
+    
+    public int getY() { 
+    	return y; 
+    }
+    
+    public int getLargo() { 
+    	return largo; 
+    }
+    
+    public int getAncho() { 
+    	return ancho; 
+    }
+    
+    public Color getColor() { 
+    	return color; 
+    }
+
+    
+    public void setX(int x) { 
+    	this.x = x; 
+    }
+    
+    public void setY(int y) { 
+    	this.y = y; 
+    }
+    
+    public void setLargo(int largo) { 
+    	this.largo = largo; 
+    }
+    public void setAncho(int ancho) {
+    	this.ancho = ancho;
+    }
+    public void setColor(Color color) { 
+    	this.color = color; 
+    }
 
 }

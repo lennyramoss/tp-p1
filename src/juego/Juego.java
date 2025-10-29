@@ -10,45 +10,44 @@ import entorno.InterfaceJuego;
 public class Juego extends InterfaceJuego {
 	private Entorno entorno = new Entorno(this, "Proyecto para TP", 1024, 768);
 	private InterfazPrueba interfaz;
-	//private Celda celda;
 	private Celda[] celdas;
 	private ZombieGrinch[] zombies;
 	private Regalo[] regalos;
 	private Planta[] listaPlanta;
+	private Bala[] balas;
 	private Planta planta;
 	Random random = new Random();
 	private int contadorTicks = 0;
 	private int intervaloSpawn =180; // empieza cada -3 seg.
 	private int ronda =1;
-	private Bala[] balas;
 	
 	Juego() {
-		this.interfaz = new InterfazPrueba(512,84,168,1024,Color.gray);
-		this.planta = new Planta(75, 250, 50, Color.orange, 3);
-		//this.celda = new Celda(84,228,120,120,Color.green);
-		int filas = 5;
-		int columnas = 10;
-		int posX = 75;
-		int posY = 250;
-		
-		// --- DISPARO AUTOMÁTICO ---
-		boolean hayZombieEnFila = false;
-		for (ZombieGrinch z : zombies) {
-		    if (z != null && Math.abs(z.getY() - planta.getY()) < 20 && z.getX() > planta.getX()) {
-		        hayZombieEnFila = true;
-		        break;
-		    }
-		}
+		//----DECLARO LOS OBJETOS Y LISTAS----
+		interfaz = new InterfazPrueba(512,84,168,1024,Color.gray);
+		planta = new Planta(75, 250, 50, Color.orange, 3);
+		regalos = new Regalo[5];
+		zombies = new ZombieGrinch[15];
+		listaPlanta = new Planta[10];
+		balas = new Bala[50];
 
-		if (hayZombieEnFila) {
-		    // Buscar espacio libre para una nueva bala
-		    for (int i = 0; i < balas.length; i++) {
-		        if (balas[i] == null || !balas[i].estaActiva()) {
-		            balas[i] = new Bala(this.X+ 30, this.y);
-		            break;
-		        }
-		    }
-		}
+		// --- DISPARO AUTOMÁTICO ---
+//		boolean hayZombieEnFila = false;
+//		for (ZombieGrinch z : zombies) {
+//		    if (z != null && Math.abs(z.getY() - planta.getY()) < 20 && z.getX() > planta.getX()) {
+//		        hayZombieEnFila = true;
+//		        break;
+//		    }
+//		}
+//
+//		if (hayZombieEnFila) {
+//		    // Buscar espacio libre para una nueva bala
+//		    for (int i = 0; i < balas.length; i++) {
+//		        if (balas[i] == null || !balas[i].estaActiva()) {
+//		            balas[i] = new Bala(this.x+ 30, this.y);
+//		            break;
+//		        }
+//		    }
+//		}
 
 		// --- ACTUALIZAR Y DIBUJAR BALAS ---
 		for (int i = 0; i < balas.length; i++) {
@@ -75,9 +74,15 @@ public class Juego extends InterfaceJuego {
 		            b.desactivar();
 		        }
 		    }
+		    
+		    
 		}
 
-		
+		//----CREAR CELDAS----
+		int filas = 5;
+		int columnas = 10;
+		int posX = 75;
+		int posY = 250;
 		this.celdas = new Celda[filas * columnas];
 		int cont = 0;
 		for (int fil = 0; fil < filas; fil++) {
@@ -96,20 +101,14 @@ public class Juego extends InterfaceJuego {
 		
 		}
 		
-		regalos = new Regalo[5];
+		//----CREAR REGALOS----
 		int x = 75;
-        //int y = 250;
 		int[] posFila = {250, 350, 450, 550, 650}; //misma que la de zombies
- 
 		for (int i=0;i<regalos.length;i++) {
 			regalos[i] = new Regalo(x,posFila[i],50,50,Color.orange);
-			//regalos[i] = new Regalo(x,y,100,200,Color.cyan);
-			//y+=100;
 		}
-		this.zombies = new ZombieGrinch[15];
-		this.listaPlanta = new Planta[10];
+
 		this.entorno.iniciar();
-		this.balas = new Bala[50];
 	}
 
 
@@ -117,20 +116,25 @@ public class Juego extends InterfaceJuego {
 		
 		
 		interfaz.dibujar(entorno);
-		// dibujar celdas 
+		//----DIBUJAR CELDAS----
 		for (int i=0;i<celdas.length;i++) {
 			this.celdas[i].dibujar(entorno);
 		}
 		
+		
+		//----DIBUJAR ZOMBIES----
 		for (int i = 0; i < zombies.length; i++) {
 			if (zombies[i] != null) {
 				zombies[i].dibujar(entorno);
 				zombies[i].caminar();
 			}	
 		}
+		
+		
+		//----DIBUJAR REGALOS----
 		for (int i = 0; i < regalos.length; i++) {
 		    Regalo r = regalos[i];
-		    r.dibujar(entorno);
+		    r.dibujar(entorno);			
 		}
 
 		
@@ -150,6 +154,7 @@ public class Juego extends InterfaceJuego {
 
 		
 		
+		//----DIBUJAR LAS PLANTAS CON EL CLICK----
 		this.planta.dibujar(entorno);
 		int diametro = 80;
 		if (entorno.sePresionoBoton(entorno.BOTON_IZQUIERDO)) {
@@ -158,6 +163,8 @@ public class Juego extends InterfaceJuego {
 		if (planta != null) {
 		    planta.dibujar(entorno);
 		}
+		
+
 		
 		
 	}
