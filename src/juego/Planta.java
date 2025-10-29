@@ -35,6 +35,9 @@ public class Planta {
     	return y; 
     }
 
+    public int getDiametro() {
+    	return diametro;
+    }
 }
 
 //buscar colission en moodle

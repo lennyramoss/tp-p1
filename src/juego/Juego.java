@@ -38,16 +38,8 @@ public class Juego extends InterfaceJuego {
 		        break;
 		    }
 		}
-	
-		if (hayZombieEnFila) {
-		    // Buscar espacio libre para una nueva bala
-		    for (int i = 0; i < balas.length; i++) {
-		        if (balas[i] == null || !balas[i].estaActiva()) {
-		            balas[i] = new Bala(this.x+ 30, this.y);
-		            break;
-		        }
-		    }
-		}
+
+
 
 
 		// --- ACTUALIZAR Y DIBUJAR BALAS ---
@@ -134,8 +126,8 @@ public class Juego extends InterfaceJuego {
 		
 		//----DIBUJAR REGALOS----
 		for (int i = 0; i < regalos.length; i++) {
-		    Regalo r = regalos[i];
-		    r.dibujar(entorno);			
+			if(this.regalos[i] != null)
+				regalos[i].dibujar(entorno);			
 		}
 
 		
@@ -143,7 +135,6 @@ public class Juego extends InterfaceJuego {
 		//control de Spawn
 		contadorTicks++;
 		if (contadorTicks >= intervaloSpawn) {
-			agregarZombie();
 			contadorTicks=0;
 			// aumentar dificultad progresivamente 
 			if(intervaloSpawn >60);
@@ -165,11 +156,30 @@ public class Juego extends InterfaceJuego {
 		    planta.dibujar(entorno);
 		}
 		
+		//----COLISION REGALO Y ZOMBIE----
+		for (int i=0; i<regalos.length; i++) {
+			for (int j=0; j<zombies.length; j++) {
+				if (this.regalos[i] != null && regalos[i].colisionaConCirculo(zombies[j])) { //checkeo el null siempre que se elimine el objeto
+					regalos[i] = null;	
+				}
+			}
+		}
 
+//		for (Regalo r : this.regalos) {
+//			for (int j=0; j<zombies.length; j++) {
+//				if (r != null && r.colisionaConCirculo(zombies[j])) { //checkeo el null siempre que se elimine el objeto
+//					r = null;	
+//				}
+//			}
+//		}
+		
 		
 		
 	}
+	
 
+	//arreglar null de regalos y que la bala salga de la planta
+	
 	private void agregarZombie() {
         int[] posFila = {250, 350, 450, 550, 650}; 
         int filaRandom = random.nextInt(5);

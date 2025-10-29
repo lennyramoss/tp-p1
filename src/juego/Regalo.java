@@ -34,9 +34,8 @@ public class Regalo {
 		
 		int xCercano=Math.max(bordeIzquierdo, Math.min(bordeDerecho,this.x));
 		int yCercano=Math.max(bordeSuperior, Math.min(bordeInferior,this.y));
-		
-		int difX=xCercano-z.getX();
-		int difY=yCercano-z.getY();
+		int difX=(int) (xCercano-z.getX());
+		int difY=(int) (yCercano-z.getY());
 		int distancia=(int) Math.sqrt((difX*difX)+(difY*difY));
 		
 		if(distancia<=z.getDiametro()/2) {
