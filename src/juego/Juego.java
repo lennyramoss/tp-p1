@@ -14,7 +14,7 @@ public class Juego extends InterfaceJuego {
 	private ZombieGrinch[] zombies;
 	private Regalo[] regalos;
 	private Planta[] listaPlanta;
-	private Bala[] balas;
+	private Bala[] balas= new Bala[50];
 	private Planta planta;
 	Random random = new Random();
 	private int contadorTicks = 0;
@@ -30,46 +30,6 @@ public class Juego extends InterfaceJuego {
 		listaPlanta = new Planta[10];
 		balas = new Bala[50];
 
-		// --- DISPARO AUTOMÁTICO ---
-		boolean hayZombieEnFila = false;
-		for (ZombieGrinch z : zombies) {
-		    if (z != null && Math.abs(z.getY() - planta.getY()) < 20 && z.getX() > planta.getX()) {
-		        hayZombieEnFila = true;
-		        break;
-		    }
-		}
-
-
-
-
-		// --- ACTUALIZAR Y DIBUJAR BALAS ---
-		for (int i = 0; i < balas.length; i++) {
-		    Bala b = balas[i];
-		    if (b != null && b.estaActiva()) {
-		        b.mover();
-		        b.dibujar(entorno);
-
-		        // Colisión con zombies
-		        for (int j = 0; j < zombies.length; j++) {
-		            ZombieGrinch z = zombies[j];
-		            if (z != null && b.colisionaConZombie(z)) {
-		                z.recibirDanio();
-		                b.desactivar();
-		                if (z.getVida() <= 0) {
-		                    zombies[j] = null;
-		                }
-		                break;
-		            }
-		        }
-
-		        // Si sale de la pantalla por la derecha
-		        if (b.fueradelrecuadro(entorno)) {
-		            b.desactivar();
-		        }
-		    }
-		    
-		    
-		}
 
 		//----CREAR CELDAS----
 		int filas = 5;
@@ -123,13 +83,64 @@ public class Juego extends InterfaceJuego {
 			}	
 		}
 		
-		
+		//----DIBUJAR LAS PLANTAS CON EL CLICK----
+		this.planta.dibujar(entorno);
+		int diametro = 80;
+		if (entorno.sePresionoBoton(entorno.BOTON_IZQUIERDO)) {
+			planta = new Planta(entorno.mouseX(), entorno.mouseY(), diametro, Color.PINK, 3);
+		}
+		if (planta != null) {
+		    planta.dibujar(entorno);
+		}
+		boolean zombieEnFila = false;
+		for (ZombieGrinch z: zombies) {
+			if (z !=null && Math.abs(z.getY()-planta.getY())<20 && z.getX()>planta.getX()) {
+				zombieEnFila= true;
+				break;
+				
+			}
+		}
+		//si hay zombie la planta dispara
+		if (zombieEnFila && planta.puedeDisparar()) {
+			for(int i=0; i < balas.length;i++) {
+				if(balas[i]== null || !balas[i].estaActiva()) {
+					balas[i]=planta.disparar();
+					break;
+				}
+			}
+		}
+		// --- Mover y dibujar balas ---
+		for (int i = 0; i < balas.length; i++) {
+		    Bala b = balas[i];
+		    if (b != null && b.estaActiva()) {
+		        b.mover();
+		        b.dibujar(entorno);
+		 // Si sale del entorno, desactivarla
+		        if (b.fueradelrecuadro(entorno)) {
+		        	b.desactivar();
+		        	//zombie en fila
+		        	 for (int j = 0; j < zombies.length; j++) {
+		                 if (zombies[j] != null && b.colisionZombie(zombies[j])) {
+		                     b.desactivar();
+		                     zombies[j].recibirDanio(); // asumimos que ZombieGrinch tiene método restarVida()
+		                     if (!zombies[j].estaVivo()) {
+		                         zombies[j] = null;
+		                     }
+		                     break;
+		                 }
+		             }
+		         }
+		     }
+
+
+        }
+
 		//----DIBUJAR REGALOS----
 		for (int i = 0; i < regalos.length; i++) {
 			if(this.regalos[i] != null)
 				regalos[i].dibujar(entorno);			
 		}
-
+		
 		
 		
 		//control de Spawn
@@ -146,16 +157,7 @@ public class Juego extends InterfaceJuego {
 
 		
 		
-		//----DIBUJAR LAS PLANTAS CON EL CLICK----
-		this.planta.dibujar(entorno);
-		int diametro = 80;
-		if (entorno.sePresionoBoton(entorno.BOTON_IZQUIERDO)) {
-			planta = new Planta(entorno.mouseX(), entorno.mouseY(), diametro, Color.PINK, 3);
-		}
-		if (planta != null) {
-		    planta.dibujar(entorno);
-		}
-		
+
 		//----COLISION REGALO Y ZOMBIE----
 		for (int i=0; i<regalos.length; i++) {
 			for (int j=0; j<zombies.length; j++) {

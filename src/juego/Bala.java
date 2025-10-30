@@ -28,7 +28,10 @@ public class Bala {
     public boolean estaActiva() {
         return activa;
     }
-
+    
+    public void desactivarBala() {
+    	activa= false;
+    }
     public void mover() {
         if (activa) {
             this.x += velocidad;
@@ -52,13 +55,10 @@ public class Bala {
     
     // colision con zombie 
     
-    public boolean colisionaConZombie(ZombieGrinch z) {
-        if (z == null) return false;
-        double dx = this.x - z.getX();
-        double dy = this.y - z.getY();
-        double distancia = Math.sqrt(dx * dx + dy * dy);
-        double radioSuma = (this.diametro / 2) + (z.getDiametro() / 2);
-        return distancia < radioSuma;
+    public boolean colisionZombie(ZombieGrinch z) {
+        if (z == null || !activa) return false;
+        double distancia = Math.sqrt(Math.pow(x - z.getX(), 2)+ Math.pow(y - z.getY(), 2));
+        return distancia < (this.diametro/2 + z.getDiametro()/2);
     }
     public int getDaño() {
         return daño;

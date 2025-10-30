@@ -9,7 +9,8 @@ public class Planta {
     private int diametro;
     private Color color;
     private int vida;     
-
+    private int tiempoRecarga = 60;
+    private int contadorDisparo=0;
     Planta(int x, int y, int diametro, Color c, int vida) {
         this.x = x;
         this.y = y;
@@ -20,13 +21,21 @@ public class Planta {
 
     public void dibujar(Entorno e) {
     	e.dibujarCirculo(this.x, this.y, this.diametro, this.color);
+    	if (contadorDisparo >0) {
+    		contadorDisparo--;
+    	}
     }
-
-
+    public boolean puedeDisparar() {
+    	return contadorDisparo <=0;
+    }
+    public Bala disparar() {
+    	contadorDisparo= tiempoRecarga;
+    	return new Bala(this.x + this.diametro/2, this.y);
+    }
     public boolean estaViva() {
         return this.vida > 0;
     }
-
+    
     public int getX() {
     	return x; 
     }
