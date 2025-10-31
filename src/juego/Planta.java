@@ -11,6 +11,7 @@ public class Planta {
     private int vida;     
     private int tiempoRecarga = 60;
     private int contadorDisparo=0;
+    
     Planta(int x, int y, int diametro, Color c, int vida) {
         this.x = x;
         this.y = y;
@@ -24,6 +25,13 @@ public class Planta {
     	if (contadorDisparo >0) {
     		contadorDisparo--;
     	}
+    }
+    public boolean colisionaConZombie(ZombieGrinch z) {
+        if (z == null) return false;
+        double dx = this.getX() - z.getX();
+        double dy = this.getY() - z.getY();
+        double r  = this.getDiametro()/2.0 + z.getDiametro()/2.0;
+        return dx*dx + dy*dy <= r*r;
     }
     public boolean puedeDisparar() {
     	return contadorDisparo <=0;
