@@ -9,7 +9,7 @@ public class Planta {
     private int diametro;
     private Color color;
     private int vida;     
-    private int tiempoRecarga = 60;
+    private int tiempoRecarga = 120;
     private int contadorDisparo=0;
     
     Planta(int x, int y, int diametro, Color c, int vida) {

@@ -16,7 +16,7 @@ public class Bala {
     Bala(int x, int y) {
         this.x = x;
         this.y = y;
-        this.velocidad = 5;
+        this.velocidad = 1;
         this.daño = 1;
         this.activa = true;
         this.diametro = 10;
@@ -53,7 +53,6 @@ public class Bala {
         return this.x - this.diametro / 2 > e.ancho();
     }
     
-    // colision con zombie 
     
     public boolean colisionZombie(ZombieGrinch z) {
         if (z == null || !activa) return false;

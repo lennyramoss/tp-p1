@@ -71,6 +71,7 @@ public class Juego extends InterfaceJuego {
 		
 		
 		interfaz.dibujar(entorno);
+		carta.actualizar();
 		carta.dibujar(entorno);
 		//----DIBUJAR CELDAS----
 		for (int i=0;i<celdas.length;i++) {
@@ -91,7 +92,7 @@ public class Juego extends InterfaceJuego {
 		//----DIBUJAR LAS PLANTAS CON EL CLICK----
 		if (entorno.estaPresionado(entorno.BOTON_IZQUIERDO)) {
 			if (previewPlanta == null && mouseIzqPrevio == false) {
-				if (carta.puntoEstaDentro(entorno.mouseX(), entorno.mouseY())) {
+				if (carta.puntoEstaDentro(entorno.mouseX(), entorno.mouseY()) && carta.estaDisponible()) {
 					previewPlanta = new Planta(entorno.mouseX(), entorno.mouseY(), 80, Color.cyan,3);
 				}
 			}
@@ -119,6 +120,7 @@ public class Juego extends InterfaceJuego {
 							int centroY = celdaSoltada.getY();
 							plantas[p] = new Planta(centroX, centroY, 80, Color.PINK, 3);
 							celdaSoltada.setOcupada(true); 
+							carta.iniciarRecarga();
 							break;
 						}
 					}

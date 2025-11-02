@@ -15,7 +15,7 @@ public class ZombieGrinch {
     ZombieGrinch(int x, int y) {
         this.x = x;
         this.y = y;
-        this.velocidad = 3;
+        this.velocidad = 1;
         this.vida = 5;
         this.diametro = 75;
         }
