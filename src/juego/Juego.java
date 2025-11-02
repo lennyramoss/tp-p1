@@ -18,6 +18,7 @@ public class Juego extends InterfaceJuego {
 	private Carta carta;
 	private boolean mouseIzqPrevio = false; //tick actualiza constantemente, me conviene que detecte el tick anterior con un boolean
 	private Planta previewPlanta = null;
+	private Planta plantaSeleccionada = null;
 	Random random = new Random();
 	private int contadorTicks = 0;
 	private int intervaloSpawn =180; // empieza cada -3 seg.
@@ -105,7 +106,21 @@ public class Juego extends InterfaceJuego {
 			if (previewPlanta == null && mouseIzqPrevio == false) {
 				if (carta.puntoEstaDentro(entorno.mouseX(), entorno.mouseY()) && carta.estaDisponible()) {
 					previewPlanta = new Planta(entorno.mouseX(), entorno.mouseY(), 80, Color.cyan,3);
+					plantaSeleccionada = null;
 				}
+				else {
+					boolean clicEnPlanta = false;
+					for (int i = 0; i < plantas.length; i++) {
+						if (plantas[i] != null && plantas[i].puntoEstaDentro(entorno.mouseX(), entorno.mouseY())) {
+							plantaSeleccionada = plantas[i];
+							clicEnPlanta = true;
+							break;
+						}
+				}
+				if (!clicEnPlanta) {
+					plantaSeleccionada = null;
+					}
+				}	
 			}
 		    //si izq==true sigue al mouse y dibuja la preview
 			if (previewPlanta != null) {
@@ -113,34 +128,33 @@ public class Juego extends InterfaceJuego {
 				previewPlanta.setY(entorno.mouseY());
 			}
 			mouseIzqPrevio = true;
-		}
-		else {
+			}
+			else {
 		    // si se suelta(mIP() se vuelve true), coloca la real 
-		    if (mouseIzqPrevio && previewPlanta != null) {
-		    	Celda celdaSoltada = null;
-		        for (int c = 0; c < celdas.length; c++) {
-		        	if (celdas[c].puntoEstaDentro(entorno.mouseX(), entorno.mouseY())) {
-						celdaSoltada = celdas[c];
-		                break; //sin esto imprime una sola planta
-		            }
-		        }
-		        if (celdaSoltada != null && !celdaSoltada.estaOcupada()) {
-					for (int p = 0; p < plantas.length; p++) {
-						if (plantas[p] == null) {
-							int centroX = celdaSoltada.getX();
-							int centroY = celdaSoltada.getY();
-							plantas[p] = new Planta(centroX, centroY, 80, Color.PINK, 3);
-							celdaSoltada.setOcupada(true); 
-							carta.iniciarRecarga();
-							break;
+				if (mouseIzqPrevio && previewPlanta != null) {
+					Celda celdaSoltada = null;
+					for (int c = 0; c < celdas.length; c++) {
+						if (celdas[c].puntoEstaDentro(entorno.mouseX(), entorno.mouseY())) {
+							celdaSoltada = celdas[c];
+							break; //sin esto imprime una sola planta
+							}
 						}
+						if (celdaSoltada != null && !celdaSoltada.estaOcupada()) {
+							for (int p = 0; p < plantas.length; p++) {
+								if (plantas[p] == null) {
+									int centroX = celdaSoltada.getX();
+									int centroY = celdaSoltada.getY();
+									plantas[p] = new Planta(centroX, centroY, 80, Color.PINK, 3);
+									celdaSoltada.setOcupada(true); 
+									carta.iniciarRecarga();
+									break;
+								}
+							}
+						}
+						previewPlanta = null;
 					}
-		        }
-		        previewPlanta = null;
-		    }
-		    mouseIzqPrevio = false;
-		}
-		
+					mouseIzqPrevio = false;
+				}
 		//----DIBUJAR LAS PLANTAS----
 		for (int i = 0; i < plantas.length; i++) {
 		    if (plantas[i] != null) {
@@ -168,7 +182,66 @@ public class Juego extends InterfaceJuego {
 		if (previewPlanta != null) {
 		    previewPlanta.dibujar(entorno);
 		}
+		
+		//esto es para mostrar la planta que seleccionamos para mover con WASD
+		if (plantaSeleccionada != null) {
+			Color colorSeleccion = new Color(255, 255, 0, 150);
+			entorno.dibujarCirculo(plantaSeleccionada.getX(), plantaSeleccionada.getY(), plantaSeleccionada.getDiametro() + 10, colorSeleccion);
+		}
+		
+if (plantaSeleccionada != null) {
+			
+			int dx = 0;
+			int dy = 0;
 
+			boolean teclaArriba = entorno.sePresiono(entorno.TECLA_ARRIBA) || entorno.sePresiono('w');
+			boolean teclaAbajo = entorno.sePresiono(entorno.TECLA_ABAJO) || entorno.sePresiono('s');
+			boolean teclaIzquierda = entorno.sePresiono(entorno.TECLA_IZQUIERDA) || entorno.sePresiono('a');
+			boolean teclaDerecha = entorno.sePresiono(entorno.TECLA_DERECHA) || entorno.sePresiono('d');
+
+			if (teclaArriba) {
+				dy = -100;
+			}
+			else if (teclaAbajo) {
+				dy = 100;
+			}
+			else if (teclaIzquierda) {
+				dx = -100;
+			}
+			else if (teclaDerecha) {
+				dx = 100;
+			}
+
+			if (dx != 0 || dy != 0) {
+				
+				int xActual = plantaSeleccionada.getX();
+				int yActual = plantaSeleccionada.getY();
+				int xNueva = xActual + dx;
+				int yNueva = yActual + dy;
+
+				Celda celdaActual = null;
+				Celda celdaNueva = null;
+				
+				for (int i = 0; i < celdas.length; i++) {
+					if (celdas[i].getX() == xActual && celdas[i].getY() == yActual) {
+						celdaActual = celdas[i];
+					}
+					if (celdas[i].getX() == xNueva && celdas[i].getY() == yNueva) {
+						celdaNueva = celdas[i];
+					}
+					if (celdaActual != null && celdaNueva != null) {
+						break;
+					}
+				}
+				
+				if (celdaActual != null && celdaNueva != null && !celdaNueva.estaOcupada()) {
+					plantaSeleccionada.setX(xNueva);
+					plantaSeleccionada.setY(yNueva);
+					celdaActual.setOcupada(false);
+					celdaNueva.setOcupada(true);
+				}
+			}
+		}
 
 		// --- Mover y dibujar balas ---
 		for (int i = 0; i < balas.length; i++) {
@@ -261,6 +334,7 @@ public class Juego extends InterfaceJuego {
 			}
 		}
 	}
+
 		
 //		for (Regalo r : this.regalos) {
 //			for (int j=0; j<zombies.length; j++) {

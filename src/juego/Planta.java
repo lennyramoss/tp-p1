@@ -63,6 +63,14 @@ public class Planta {
     public void setY(int y) {
     	this.y = y; 
     	}
+    
+	public boolean puntoEstaDentro(int px, int py) {
+		double difX = px - this.x;
+		double difY = py - this.y;
+		double distancia = Math.sqrt((difX * difX) + (difY * difY));
+		double radio = this.diametro / 2.0;
+		return distancia <= radio;
+	}
 }
 
 //buscar colission en moodle
