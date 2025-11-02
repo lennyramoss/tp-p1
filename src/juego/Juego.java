@@ -223,11 +223,20 @@ public class Juego extends InterfaceJuego {
 			
 			for (int j = 0; j < zombies.length; j++) {
 				if (zombies[j] != null && plantas[i].colisionaConZombie(zombies[j])) {
+					int xPlantaMuerta = plantas[i].getX();
+					int yPlantaMuerta = plantas[i].getY();
 					plantas[i] = null;
-					break; 
+					
+					for (int c = 0; c < celdas.length; c++) {
+						if (celdas[c].getX() == xPlantaMuerta && celdas[c].getY() == yPlantaMuerta) {
+							celdas[c].setOcupada(false); 
+							break;
+						}
 				}
+				break; 
 			}
 		}
+	}
 		
 //		for (Regalo r : this.regalos) {
 //			for (int j=0; j<zombies.length; j++) {
