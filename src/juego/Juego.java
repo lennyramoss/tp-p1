@@ -72,6 +72,9 @@ public class Juego extends InterfaceJuego {
 
 	public void tick(){
 		
+		if (juegoTerminado) {
+			return;
+		}
 		
 		interfaz.dibujar(entorno);
 		carta.actualizar();
@@ -221,14 +224,21 @@ public class Juego extends InterfaceJuego {
 		
 
 		//----COLISION REGALO Y ZOMBIE----
-		for (int i=0; i<regalos.length; i++) {
+		for (int i=0; i < regalos.length; i++) {
 			for (int j=0; j<zombies.length; j++) {
 				if (this.regalos[i] != null && regalos[i].colisionaConCirculo(zombies[j])) { //checkeo el null siempre que se elimine el objeto
 					regalos[i] = null;	
 				}
 			}
 		}
-
+		
+		for (int i = 0; i < regalos.length; i++) {
+			if (regalos[i] == null) {
+				juegoTerminado = true;
+				break;
+			}
+		}
+		
 		//----COLISION PLANTA CON ZOMBIE
 		for (int i = 0; i < plantas.length; i++) {
 			if (plantas[i] == null) {
