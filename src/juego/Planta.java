@@ -55,6 +55,14 @@ public class Planta {
     public int getDiametro() {
     	return diametro;
     }
+    
+    public void setX(int x) {
+    	this.x = x; 
+    	}
+    
+    public void setY(int y) {
+    	this.y = y; 
+    	}
 }
 
 //buscar colission en moodle

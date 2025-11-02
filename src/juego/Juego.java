@@ -29,7 +29,7 @@ public class Juego extends InterfaceJuego {
 		carta = new Carta(100,84,100,70,Color.red);
 		regalos = new Regalo[5];
 		zombies = new ZombieGrinch[15];
-		plantas = new Planta[10];
+		plantas = new Planta[100];
 		balas = new Bala[50];
 
 
@@ -90,20 +90,42 @@ public class Juego extends InterfaceJuego {
 		
 		//----DIBUJAR LAS PLANTAS CON EL CLICK----
 		if (entorno.estaPresionado(entorno.BOTON_IZQUIERDO)) {
-		    previewPlanta = new Planta(entorno.mouseX(), entorno.mouseY(), 80, Color.cyan,3);
+			if (previewPlanta == null && mouseIzqPrevio == false) {
+				if (carta.puntoEstaDentro(entorno.mouseX(), entorno.mouseY())) {
+					previewPlanta = new Planta(entorno.mouseX(), entorno.mouseY(), 80, Color.cyan,3);
+				}
+			}
 		    //si izq==true sigue al mouse y dibuja la preview
+			if (previewPlanta != null) {
+				previewPlanta.setX(entorno.mouseX()); 
+				previewPlanta.setY(entorno.mouseY());
+			}
+			mouseIzqPrevio = true;
 		}
 		else {
 		    // si se suelta(mIP() se vuelve true), coloca la real 
 		    if (mouseIzqPrevio && previewPlanta != null) {
-		        for (int i = 0; i < plantas.length; i++) {
-		            if (plantas[i] == null) {
-		                plantas[i] = new Planta(previewPlanta.getX(), previewPlanta.getY(), 80, Color.PINK, 3);
+		    	Celda celdaSoltada = null;
+		        for (int c = 0; c < celdas.length; c++) {
+		        	if (celdas[c].puntoEstaDentro(entorno.mouseX(), entorno.mouseY())) {
+						celdaSoltada = celdas[c];
 		                break; //sin esto imprime una sola planta
 		            }
 		        }
-		        previewPlanta = null; //vuelve null la preview
+		        if (celdaSoltada != null && !celdaSoltada.estaOcupada()) {
+					for (int p = 0; p < plantas.length; p++) {
+						if (plantas[p] == null) {
+							int centroX = celdaSoltada.getX();
+							int centroY = celdaSoltada.getY();
+							plantas[p] = new Planta(centroX, centroY, 80, Color.PINK, 3);
+							celdaSoltada.setOcupada(true); 
+							break;
+						}
+					}
+		        }
+		        previewPlanta = null;
 		    }
+		    mouseIzqPrevio = false;
 		}
 		
 		//----DIBUJAR LAS PLANTAS----
@@ -133,10 +155,6 @@ public class Juego extends InterfaceJuego {
 		if (previewPlanta != null) {
 		    previewPlanta.dibujar(entorno);
 		}
-		
-		// vuelve a dejarlo en false 
-		mouseIzqPrevio = entorno.estaPresionado(entorno.BOTON_IZQUIERDO);
-
 
 
 		// --- Mover y dibujar balas ---
@@ -198,10 +216,15 @@ public class Juego extends InterfaceJuego {
 		}
 
 		//----COLISION PLANTA CON ZOMBIE
-		for (int i=0; i<plantas.length;i++) {
-			for (int j=0; j<plantas.length; j++) {
-				if (this.plantas[i] != null && plantas[i].colisionaConZombie(zombies[j])) {
+		for (int i = 0; i < plantas.length; i++) {
+			if (plantas[i] == null) {
+				continue; 
+			}
+			
+			for (int j = 0; j < zombies.length; j++) {
+				if (zombies[j] != null && plantas[i].colisionaConZombie(zombies[j])) {
 					plantas[i] = null;
+					break; 
 				}
 			}
 		}
