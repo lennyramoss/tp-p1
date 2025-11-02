@@ -21,7 +21,10 @@ public class Juego extends InterfaceJuego {
 	Random random = new Random();
 	private int contadorTicks = 0;
 	private int intervaloSpawn =180; // empieza cada -3 seg.
-	private int ronda =1;
+	private int ronda = 1;
+	private int totalZombiesParaGanar = 50;
+	private int zombiesEliminados = 0;
+		private boolean juegoTerminado = false;
 	
 	Juego() {
 		//----DECLARO LOS OBJETOS Y LISTAS----
@@ -73,6 +76,11 @@ public class Juego extends InterfaceJuego {
 		interfaz.dibujar(entorno);
 		carta.actualizar();
 		carta.dibujar(entorno);
+		int segundos = entorno.tiempo() / 1000;
+		int enemigosRestantes = totalZombiesParaGanar - zombiesEliminados;
+		entorno.escribirTexto("Tiempo de juego: " + segundos, 300, 90);
+		entorno.escribirTexto("Eliminados: " + zombiesEliminados, 500, 90);
+		entorno.escribirTexto("Restantes: " + enemigosRestantes, 700, 90);
 		//----DIBUJAR CELDAS----
 		for (int i=0;i<celdas.length;i++) {
 			this.celdas[i].dibujar(entorno);
@@ -172,6 +180,10 @@ public class Juego extends InterfaceJuego {
 		        		zombies[j].recibirDanio(); // asumimos que ZombieGrinch tiene método restarVida()
 		        		if (!zombies[j].estaVivo()) {
 		        			zombies[j] = null;
+		        			zombiesEliminados++;
+		        			if (zombiesEliminados >= totalZombiesParaGanar) {
+		        				juegoTerminado = true;
+		        			}
 		        		}
 		        		break;
 		        	}
