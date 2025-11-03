@@ -11,7 +11,7 @@ public class Planta {
     private int vida;     
     private int tiempoRecarga = 120;
     private int contadorDisparo=0;
-    
+    private Bala balaActual;
     Planta(int x, int y, int diametro, Color c, int vida) {
         this.x = x;
         this.y = y;
@@ -34,11 +34,14 @@ public class Planta {
         return dx*dx + dy*dy <= r*r;
     }
     public boolean puedeDisparar() {
-    	return contadorDisparo <=0;
+    	return (balaActual== null || !balaActual.estaActiva());
     }
     public Bala disparar() {
-    	contadorDisparo= tiempoRecarga;
-    	return new Bala(this.x + this.diametro/2, this.y);
+    	balaActual= new Bala(this.x + this.diametro/2, this.y);
+    	return balaActual;
+    }
+    public Bala getBalaActual() {
+    	return balaActual;
     }
     public boolean estaViva() {
         return this.vida > 0;

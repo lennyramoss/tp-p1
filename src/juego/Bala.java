@@ -16,7 +16,7 @@ public class Bala {
     Bala(int x, int y) {
         this.x = x;
         this.y = y;
-        this.velocidad = 1;
+        this.velocidad = 5;
         this.daño = 1;
         this.activa = true;
         this.diametro = 10;

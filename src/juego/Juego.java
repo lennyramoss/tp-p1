@@ -168,9 +168,11 @@ public class Juego extends InterfaceJuego {
 					}
 				}
 				if (zombieEnFila && plantas[i].puedeDisparar()) {
+					Bala nuevaBala= plantas[i].disparar();
+					
 					for(int j=0; j < balas.length;j++) {
 						if(balas[j]== null || !balas[j].estaActiva()) {
-							balas[j]=plantas[i].disparar();
+							balas[j]= nuevaBala;
 							break;
 						}
 					}
@@ -253,6 +255,8 @@ if (plantaSeleccionada != null) {
 		        for (int j = 0; j < zombies.length; j++) {
 		        	if (zombies[j] != null && b.colisionZombie(zombies[j])) {
 		        		b.desactivar();
+		        		balas[i]= null;
+		        		
 		        		zombies[j].recibirDanio(); // asumimos que ZombieGrinch tiene método restarVida()
 		        		if (!zombies[j].estaVivo()) {
 		        			zombies[j] = null;
@@ -263,9 +267,9 @@ if (plantaSeleccionada != null) {
 		        		}
 		        		break;
 		        	}
-		        // Si sale del entorno, desactivarla
+		        // Si sale del entorno, bala es null
 		        if (b.fueradelrecuadro(entorno)) {
-		        	b.desactivar();
+		        	balas[i]= null;
 		             }
 		         }
 		     }
